@@ -21,7 +21,7 @@ limitations under the License. */
 #include <hip/hip_runtime.h>
 #include <hipblas.h>
 #include <hiprand.h>
-#include <cudnn.h>
+#include <miopen/miopen.h>
 #include "hl_base.h"
 
 /**
@@ -45,7 +45,7 @@ typedef struct {
     hipStream_t         *stream;
     hipblasHandle_t     handle;
     hiprandGenerator_t  gen;
-    cudnnHandle_t       cudnn_handle;
+    miopenHandle_t      cudnn_handle;
     pthread_mutex_t     *gen_mutex;
 }_global_device_resources, *global_device_resources;
 

@@ -21,9 +21,9 @@ limitations under the License. */
  * @brief   hppl for cudnn tensor4d descriptor.
  */
 typedef struct {
-    cudnnTensorDescriptor_t     desc;
-    cudnnTensorFormat_t         format;
-    cudnnDataType_t             data_type;  // image data type
+    miopenTensorDescriptor_t    desc;
+    //cudnnTensorFormat_t       format;
+    miopenDataType_t            data_type;  // image data type
     int batch_size;                         // number of input batch size
     int feature_maps;                       // number of input feature maps
     int height;                             // height of input image
@@ -36,8 +36,8 @@ typedef struct {
  * @brief   hppl for cudnn pooling descriptor.
  */
 typedef struct {
-    cudnnPoolingDescriptor_t   desc;
-    cudnnPoolingMode_t         mode;
+    miopenPoolingDescriptor_t  desc;
+    miopenPoolingMode_t        mode;
     int window_height;
     int window_width;
     int stride_height;
@@ -48,8 +48,8 @@ typedef struct {
  * @brief   hppl for cudnn filter descriptor.
  */
 typedef struct {
-    cudnnFilterDescriptor_t   desc;
-    cudnnDataType_t           data_type;    /* data type */
+    miopenTensorDescriptor_t  desc;
+    miopenDataType_t          data_type;    /* data type */
     int output_feature_maps;        /* number of output feature maps */
     int input_feature_maps;         /* number of input feature maps */
     int filter_height;              /* height of each input filter */
@@ -62,7 +62,7 @@ typedef struct {
  * @brief   hppl for cudnn convolution descriptor.
  */
 typedef struct {
-    cudnnConvolutionDescriptor_t    desc;
+    miopenConvolutionDescriptor_t    desc;
     hl_tensor_descriptor             input_image;
     hl_filter_descriptor            filter;
     int padding_height;                     // zero-padding height
@@ -71,7 +71,7 @@ typedef struct {
     int stride_width;                       // horizontal filter stride
     int upscalex;                           // upscale the input in x-direction
     int upscaley;                           // upscale the input in y-direction
-    cudnnConvolutionMode_t          mode;
+    miopenConvolutionMode_t          mode;
 } _cudnn_convolution_descriptor, *cudnn_convolution_descriptor;
 
 #define GET_CONVOLUTION_DESCRIPTOR(conv)    \
