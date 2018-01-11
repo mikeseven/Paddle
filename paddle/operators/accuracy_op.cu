@@ -84,8 +84,8 @@ class AccuracyOpCUDAKernel : public framework::OpKernel<T> {
     platform::GpuMemcpyAsync(total_data, &num_samples, sizeof(int),
                              hipMemcpyHostToDevice, stream);
 
-    AccuracyCudaKernel<
-        PADDLE_CUDA_NUM_THREADS><<<1, PADDLE_CUDA_NUM_THREADS, 0, stream>>>(
+    hipLaunchKernelGGL((AccuracyCudaKernel<
+        PADDLE_CUDA_NUM_THREADS>), dim3(1), dim3(PADDLE_CUDA_NUM_THREADS), 0, stream,
         num_samples, infer_width, indices_data, label_data, correct_data,
         accuracy_data);
 
