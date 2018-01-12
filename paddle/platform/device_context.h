@@ -87,7 +87,7 @@ class CUDADeviceContext : public DeviceContext {
   hipblasHandle_t cublas_handle() const;
 
   /*! \brief  Return cudnn  handle in the device context. */
-  cudnnHandle_t cudnn_handle() const;
+  miopenHandle_t cudnn_handle() const;
 
   /*! \brief  Return cuda stream in the device context. */
   hipStream_t stream() const;
@@ -99,7 +99,7 @@ class CUDADeviceContext : public DeviceContext {
   std::unique_ptr<EigenCudaStreamDevice> eigen_stream_;
 
   hipStream_t stream_;
-  cudnnHandle_t cudnn_handle_;
+  miopenHandle_t cudnn_handle_;
   hipblasHandle_t cublas_handle_;
 };
 

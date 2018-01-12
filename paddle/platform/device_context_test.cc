@@ -39,7 +39,7 @@ TEST(Device, CUDADeviceContext) {
     CUDADeviceContext* device_context = new CUDADeviceContext(GPUPlace(i));
     Eigen::GpuDevice* gpu_device = device_context->eigen_device();
     ASSERT_NE(nullptr, gpu_device);
-    cudnnHandle_t cudnn_handle = device_context->cudnn_handle();
+    miopenHandle_t cudnn_handle = device_context->cudnn_handle();
     ASSERT_NE(nullptr, cudnn_handle);
     cublasHandle_t cublas_handle = device_context->cublas_handle();
     ASSERT_NE(nullptr, cublas_handle);

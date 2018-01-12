@@ -795,7 +795,7 @@ void hl_convolution_backward_filter(hl_tensor_descriptor input,
   CHECK_CUDNN(dynload::miopenFindConvolutionBackwardWeightsAlgorithm(
       t_resource.cudnn_handle,
       src_desc,
-      input_data,
+      input_data, //?
       diff_desc,
       output_grad_data,
       conv_desc,

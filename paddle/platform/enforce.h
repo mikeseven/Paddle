@@ -33,6 +33,7 @@ limitations under the License. */
 
 #ifdef PADDLE_WITH_CUDA
 
+//#include "paddle/platform/cudnn_helper.h"
 #include "paddle/platform/dynload/cublas.h"
 #include "paddle/platform/dynload/cudnn.h"
 #include "paddle/platform/dynload/curand.h"
@@ -40,7 +41,7 @@ limitations under the License. */
 
 #include <hip/hip_runtime_api.h>
 #include <hipblas.h>
-#include <cudnn.h>
+#include <miopen/miopen.h>
 #include <hiprand.h>
 #include <rccl.h>
 #include <thrust/system/cuda/error.h>
@@ -138,11 +139,13 @@ inline typename std::enable_if<sizeof...(Args) != 0, void>::type throw_on_error(
 
 template <typename... Args>
 inline typename std::enable_if<sizeof...(Args) != 0, void>::type throw_on_error(
-    cudnnStatus_t stat, const Args&... args) {
-  if (stat == CUDNN_STATUS_SUCCESS) {
+    miopenStatus_t stat, const Args&... args) {
+  if (stat == miopenStatusSuccess) {
     return;
   } else {
-    throw std::runtime_error(platform::dynload::cudnnGetErrorString(stat) +
+   // throw std::runtime_error(platform::miopenGetErrorString(stat) +
+   //                          string::Sprintf(args...));
+    throw std::runtime_error(platform::dynload::miopenGetErrorString(stat) +
                              string::Sprintf(args...));
   }
 }
