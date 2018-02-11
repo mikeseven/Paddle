@@ -133,7 +133,7 @@ hipblasHandle_t CUDADeviceContext::cublas_handle() const {
   return cublas_handle_;
 }
 
-//cudnnHandle_t CUDADeviceContext::cudnn_handle() const { return cudnn_handle_; }
+miopenHandle_t CUDADeviceContext::cudnn_handle() const { return cudnn_handle_; }
 
 hipStream_t CUDADeviceContext::stream() const { return stream_; }
 

@@ -29,11 +29,11 @@ namespace paddle {
 namespace platform {
 
 TEST(NCCL, init) {
-  std::vector<ncclComm_t> comms;
+  std::vector<rcclComm_t> comms;
   comms.resize(dev_count);
-  PADDLE_ENFORCE(dynload::ncclCommInitAll(comms.data(), dev_count, nullptr));
+  PADDLE_ENFORCE(dynload::rcclCommInitAll(comms.data(), dev_count, nullptr));
   for (int i = 0; i < dev_count; ++i) {
-    dynload::ncclCommDestroy(comms[i]);
+    dynload::rcclCommDestroy(comms[i]);
   }
 }
 
@@ -59,10 +59,10 @@ struct PerThreadData {
 static constexpr int ELEM_COUNT = 10000;
 
 TEST(NCCL, all_reduce) {
-  std::vector<ncclComm_t> comms;
+  std::vector<rcclComm_t> comms;
   comms.resize(dev_count);
   VLOG(1) << "Initializing ncclComm";
-  PADDLE_ENFORCE(dynload::ncclCommInitAll(comms.data(), dev_count, nullptr));
+  PADDLE_ENFORCE(dynload::rcclCommInitAll(comms.data(), dev_count, nullptr));
   VLOG(1) << "ncclComm initialized";
   VLOG(1) << "Creating thread data";
   std::vector<std::unique_ptr<PerThreadData<double>>> data;
@@ -89,9 +89,9 @@ TEST(NCCL, all_reduce) {
   for (int i = 0; i < dev_count; ++i) {
     VLOG(1) << "Invoking ncclAllReduce with device " << i;
     SetDeviceId(i);
-    PADDLE_ENFORCE(dynload::ncclAllReduce(
-        data[i]->SendBuff(), data[i]->RecvBuff(), ELEM_COUNT, ncclDouble,
-        ncclSum, comms[i], data[i]->dev_ctx.stream()));
+    PADDLE_ENFORCE(dynload::rcclAllReduce(
+        data[i]->SendBuff(), data[i]->RecvBuff(), ELEM_COUNT, rcclDouble,
+        rcclSum, comms[i], data[i]->dev_ctx.stream()));
     VLOG(1) << "Invoked ncclAllReduce for device " << i;
   }
 
@@ -117,7 +117,7 @@ TEST(NCCL, all_reduce) {
   }
 
   for (int i = 0; i < dev_count; ++i) {
-    dynload::ncclCommDestroy(comms[i]);
+    dynload::rcclCommDestroy(comms[i]);
   }
 }
 }  // namespace platform

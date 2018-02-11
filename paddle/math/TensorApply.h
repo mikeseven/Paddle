@@ -13,6 +13,7 @@ See the License for the specific language governing permissions and
 limitations under the License. */
 
 #pragma once
+#include "paddle/platform/hostdevice.h"
 
 namespace paddle {
 
@@ -34,10 +35,10 @@ public:
   INLINE T& applyRef(int i, int j) { return data_[i * stride_ + j]; }
   INLINE T& applyRef(int index) { return data_[index]; }
 
-  INLINE size_t getWidth() const { return width_; }
-  INLINE size_t getHeight() const { return height_; }
-  INLINE bool isContiguous() const { return stride_ == width_ || height_ == 1; }
-  INLINE bool useGpu() const { return useGpu_; }
+  HOSTDEVICE INLINE size_t getWidth() const { return width_; }
+  HOSTDEVICE INLINE size_t getHeight() const { return height_; }
+  HOSTDEVICE INLINE bool isContiguous() const { return stride_ == width_ || height_ == 1; }
+  HOSTDEVICE INLINE bool useGpu() const { return useGpu_; }
 
   T* data_;
   size_t stride_;
@@ -63,10 +64,10 @@ public:
   INLINE T apply(int i, int j) const { return data_[i * stride_ + j]; }
   INLINE T apply(int index) const { return data_[index]; }
 
-  INLINE size_t getWidth() const { return width_; }
-  INLINE size_t getHeight() const { return height_; }
-  INLINE bool isContiguous() const { return stride_ == width_ || height_ == 1; }
-  INLINE bool useGpu() const { return useGpu_; }
+  HOSTDEVICE INLINE size_t getWidth() const { return width_; }
+  HOSTDEVICE INLINE size_t getHeight() const { return height_; }
+  HOSTDEVICE INLINE bool isContiguous() const { return stride_ == width_ || height_ == 1; }
+  HOSTDEVICE INLINE bool useGpu() const { return useGpu_; }
 
   const T* data_;
   size_t stride_;
@@ -84,10 +85,10 @@ public:
   INLINE T apply(int i, int j) const { return expr_.apply(i, j); }
   INLINE T apply(int index) const { return expr_.apply(index); }
 
-  INLINE size_t getWidth() const { return expr_.getWidth(); }
-  INLINE size_t getHeight() const { return expr_.getHeight(); }
-  INLINE bool isContiguous() const { return expr_.isContiguous(); }
-  INLINE bool useGpu() const { return expr_.useGpu(); }
+  HOSTDEVICE INLINE size_t getWidth() const { return expr_.getWidth(); }
+  HOSTDEVICE INLINE size_t getHeight() const { return expr_.getHeight(); }
+  HOSTDEVICE INLINE bool isContiguous() const { return expr_.isContiguous(); }
+  HOSTDEVICE INLINE bool useGpu() const { return expr_.useGpu(); }
 
   TensorApply<const Derived, T> expr_;
 };
@@ -104,10 +105,10 @@ public:
   INLINE T apply(int i, int j) const { return op_(expr_.apply(i, j)); }
   INLINE T apply(int index) const { return op_(expr_.apply(index)); }
 
-  INLINE size_t getWidth() const { return expr_.getWidth(); }
-  INLINE size_t getHeight() const { return expr_.getHeight(); }
-  INLINE bool isContiguous() const { return expr_.isContiguous(); }
-  INLINE bool useGpu() const { return expr_.useGpu(); }
+  HOSTDEVICE INLINE size_t getWidth() const { return expr_.getWidth(); }
+  HOSTDEVICE INLINE size_t getHeight() const { return expr_.getHeight(); }
+  HOSTDEVICE INLINE bool isContiguous() const { return expr_.isContiguous(); }
+  HOSTDEVICE INLINE bool useGpu() const { return expr_.useGpu(); }
 
   const OP op_;
   TensorApply<ArgType, T> expr_;
@@ -136,12 +137,12 @@ public:
     return op_(lhs_.apply(index), rhs_.apply(index));
   }
 
-  INLINE size_t getWidth() const { return lhs_.getWidth(); }
-  INLINE size_t getHeight() const { return rhs_.getHeight(); }
-  INLINE bool isContiguous() const {
+  HOSTDEVICE INLINE size_t getWidth() const { return lhs_.getWidth(); }
+  HOSTDEVICE INLINE size_t getHeight() const { return rhs_.getHeight(); }
+  HOSTDEVICE INLINE bool isContiguous() const {
     return lhs_.isContiguous() && rhs_.isContiguous();
   }
-  INLINE bool useGpu() const { return lhs_.useGpu(); }
+  HOSTDEVICE INLINE bool useGpu() const { return lhs_.useGpu(); }
 
   const OP op_;
   TensorApply<LhsType, T> lhs_;
@@ -174,13 +175,13 @@ public:
     return expr1_.apply(index) ? expr2_.apply(index) : expr3_.apply(index);
   }
 
-  INLINE size_t getWidth() const { return expr1_.getWidth(); }
-  INLINE size_t getHeight() const { return expr1_.getHeight(); }
-  INLINE bool isContiguous() const {
+  HOSTDEVICE INLINE size_t getWidth() const { return expr1_.getWidth(); }
+  HOSTDEVICE INLINE size_t getHeight() const { return expr1_.getHeight(); }
+  HOSTDEVICE INLINE bool isContiguous() const {
     return expr1_.isContiguous() && expr2_.isContiguous() &&
            expr3_.isContiguous();
   }
-  INLINE bool useGpu() const { return expr1_.useGpu(); }
+  HOSTDEVICE INLINE bool useGpu() const { return expr1_.useGpu(); }
 
   TensorApply<ArgType1, T> expr1_;
   TensorApply<ArgType2, T> expr2_;
@@ -199,10 +200,10 @@ public:
   INLINE T apply(int i, int j) const { return op_(i, j); }
   INLINE T apply(int index) const { return op_(index); }
 
-  INLINE size_t getWidth() const { return expr_.getWidth(); }
-  INLINE size_t getHeight() const { return expr_.getHeight(); }
-  INLINE bool isContiguous() const { return true; }
-  INLINE bool useGpu() const { return expr_.useGpu(); }
+  HOSTDEVICE INLINE size_t getWidth() const { return expr_.getWidth(); }
+  HOSTDEVICE INLINE size_t getHeight() const { return expr_.getHeight(); }
+  HOSTDEVICE INLINE bool isContiguous() const { return true; }
+  HOSTDEVICE INLINE bool useGpu() const { return expr_.useGpu(); }
 
   const OP op_;
   TensorApply<ArgType, T> expr_;
