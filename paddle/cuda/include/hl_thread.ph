@@ -20,7 +20,7 @@ limitations under the License. */
 #include <hip/hip_runtime.h>
 #include <hipblas.h>
 #include <hiprand.h>
-#include <cudnn.h>
+#include <miopen/miopen.h>
 #include "hl_base.h"
 
 /**
@@ -43,8 +43,8 @@ typedef struct {
     hipStream_t              stream[HPPL_STREAM_END];
     hipblasHandle_t          handle;
     hiprandGenerator_t       gen;
-    cudnnHandle_t            cudnn_handle;
-    cudnnTensorDescriptor_t  cudnn_desc;
+    miopenHandle_t            cudnn_handle;
+    miopenTensorDescriptor_t  cudnn_desc;
     pthread_mutex_t          *gen_mutex;
     real                     *gpu_mem;
     real                     *cpu_mem;
@@ -62,7 +62,7 @@ extern __thread _hl_thread_resource t_resource;
  * @param   cudnn_handle  Cudnn handle.
  * @param   stream        Cudnn stream.
  */
-extern void hl_cudnn_init(cudnnHandle_t *cudnn_handle, hipStream_t stream);
+extern void hl_cudnn_init(miopenHandle_t *cudnn_handle, hipStream_t stream);
 
 /**
  * @brief   Initialize cublas.
@@ -78,6 +78,6 @@ extern void hl_cublas_init(hipblasHandle_t *hipblas_handle, hipStream_t stream);
  * @param   cudnn_desc    Cudnn tensor descriptor.
  */
 
-extern void hl_cudnn_desc_init(cudnnTensorDescriptor_t*  cudnn_desc);
+extern void hl_cudnn_desc_init(miopenTensorDescriptor_t*  cudnn_desc);
 
 #endif  /* HL_THREAD_PH_ */

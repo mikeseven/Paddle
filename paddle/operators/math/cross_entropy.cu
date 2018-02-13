@@ -76,7 +76,7 @@ __global__ void SoftCrossEntropyKernel(T* Y, const T* X, const T* label,
   int next_idx = blockIdx.x * class_num + tid;
   while (cur_idx < class_num) {
     d_sum[tid] +=
-        math::TolerableValue<T>()(std::log(X[next_idx])) * label[next_idx];
+        math::TolerableValue<T>()(log(X[next_idx])) * label[next_idx];
     next_idx += blockDim.x;
     cur_idx += blockDim.x;
   }

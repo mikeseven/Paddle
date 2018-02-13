@@ -139,7 +139,8 @@ void GetCudnnDsoHandle(void** dso_handle) {
   GetDsoHandleFromSearchPath(FLAGS_cudnn_dir, "libcudnn.dylib", dso_handle,
                              false);
 #else
-  GetDsoHandleFromSearchPath(FLAGS_cudnn_dir, "libcudnn.so", dso_handle, false);
+  GetDsoHandleFromSearchPath(FLAGS_cudnn_dir,
+                             "libMIOpen.so", dso_handle, false);
 #endif
 }
 

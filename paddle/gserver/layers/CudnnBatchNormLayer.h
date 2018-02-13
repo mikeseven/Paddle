@@ -14,7 +14,6 @@ limitations under the License. */
 
 #pragma once
 
-#include <cudnn.h>
 #include "BatchNormBaseLayer.h"
 #include "Layer.h"
 #include "paddle/utils/Stat.h"

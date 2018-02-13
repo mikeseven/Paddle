@@ -104,15 +104,15 @@ CUDADeviceContext::CUDADeviceContext(GPUPlace place) : place_(place) {
   eigen_device_.reset(new Eigen::GpuDevice(eigen_stream_.get()));
   PADDLE_ENFORCE(dynload::hipblasCreate(&cublas_handle_));
   PADDLE_ENFORCE(dynload::hipblasSetStream(cublas_handle_, stream_));
-  PADDLE_ENFORCE(dynload::cudnnCreate(&cudnn_handle_));
-  PADDLE_ENFORCE(dynload::cudnnSetStream(cudnn_handle_, stream_));
+  PADDLE_ENFORCE(dynload::miopenCreate(&cudnn_handle_));
+  PADDLE_ENFORCE(dynload::miopenSetStream(cudnn_handle_, stream_));
 }
 
 CUDADeviceContext::~CUDADeviceContext() {
   SetDeviceId(place_.device);
   Wait();
   PADDLE_ENFORCE(dynload::hipblasDestroy(cublas_handle_));
-  PADDLE_ENFORCE(dynload::cudnnDestroy(cudnn_handle_));
+  PADDLE_ENFORCE(dynload::miopenDestroy(cudnn_handle_));
   eigen_stream_.reset();
   eigen_device_.reset();
   PADDLE_ENFORCE(hipStreamDestroy(stream_));
@@ -133,7 +133,7 @@ hipblasHandle_t CUDADeviceContext::cublas_handle() const {
   return cublas_handle_;
 }
 
-//cudnnHandle_t CUDADeviceContext::cudnn_handle() const { return cudnn_handle_; }
+miopenHandle_t CUDADeviceContext::cudnn_handle() const { return cudnn_handle_; }
 
 hipStream_t CUDADeviceContext::stream() const { return stream_; }
 
