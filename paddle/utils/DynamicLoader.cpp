@@ -120,25 +120,25 @@ static inline void GetDsoHandleFromSearchPath(const std::string& search_root,
 
 void GetCublasDsoHandle(void** dso_handle) {
 #if defined(__APPLE__) || defined(__OSX__)
-  GetDsoHandleFromSearchPath(FLAGS_cuda_dir, "libcublas.dylib", dso_handle);
+  GetDsoHandleFromSearchPath(FLAGS_cuda_dir, "libhipblas.dylib", dso_handle);
 #else
-  GetDsoHandleFromSearchPath(FLAGS_cuda_dir, "libcublas.so", dso_handle);
+  GetDsoHandleFromSearchPath(FLAGS_cuda_dir, "libhipblas.so", dso_handle);
 #endif
 }
 
 void GetCudnnDsoHandle(void** dso_handle) {
 #if defined(__APPLE__) || defined(__OSX__)
-  GetDsoHandleFromSearchPath(FLAGS_cudnn_dir, "libcudnn.dylib", dso_handle);
+  GetDsoHandleFromSearchPath(FLAGS_cudnn_dir, "libMIOpen.dylib", dso_handle);
 #else
-  GetDsoHandleFromSearchPath(FLAGS_cudnn_dir, "libcudnn.so", dso_handle);
+  GetDsoHandleFromSearchPath(FLAGS_cudnn_dir, "libMIOpen.so", dso_handle);
 #endif
 }
 
 void GetCurandDsoHandle(void** dso_handle) {
 #if defined(__APPLE__) || defined(__OSX__)
-  GetDsoHandleFromSearchPath(FLAGS_cuda_dir, "libcurand.dylib", dso_handle);
+  GetDsoHandleFromSearchPath(FLAGS_cuda_dir, "libhiprand.dylib", dso_handle);
 #else
-  GetDsoHandleFromSearchPath(FLAGS_cuda_dir, "libcurand.so", dso_handle);
+  GetDsoHandleFromSearchPath(FLAGS_cuda_dir, "libhiprand.so", dso_handle);
 #endif
 }
 
