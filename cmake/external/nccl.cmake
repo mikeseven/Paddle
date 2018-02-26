@@ -16,6 +16,10 @@ if(NOT WITH_GPU)
   return()
 endif()
 
+if(WITH_AMD_GPU)
+    return()
+endif()
+
 include(ExternalProject)
 
 set(NCCL_SOURCE_DIR ${THIRD_PARTY_PATH}/nccl)
