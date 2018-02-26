@@ -70,19 +70,19 @@ public:
 template <class T>
 class exp_op {
 public:
-  INLINE T operator()(const T a) const { return std::exp(a); }
+  INLINE T operator()(const T a) const { return exp(a); }
 };
 
 template <class T>
 class log_op {
 public:
-  INLINE T operator()(const T a) const { return std::log(a); }
+  INLINE T operator()(const T a) const { return log(a); }
 };
 
 template <class T>
 class sqrt_op {
 public:
-  INLINE T operator()(const T a) const { return std::sqrt(a); }
+  INLINE T operator()(const T a) const { return sqrt(a); }
 };
 
 template <class T>
@@ -136,7 +136,7 @@ private:
 
 public:
   INLINE pow_op(const T s) : p(s) {}
-  INLINE T operator()(const T a) const { return std::pow(a, p); }
+  INLINE T operator()(const T a) const { return pow(a, p); }
 };
 
 template <class T>

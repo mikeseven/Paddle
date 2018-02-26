@@ -73,7 +73,6 @@ TEST(CudnnHelper, ScopedConvolutionDescriptor) {
   auto desc = conv_desc.descriptor<float>(src_pads, src_strides, src_dilations);
 
   miopenConvolutionMode_t mode;
-  int nd;
   std::vector<int> pads(2);
   std::vector<int> strides(2);
   std::vector<int> dilations(2);
