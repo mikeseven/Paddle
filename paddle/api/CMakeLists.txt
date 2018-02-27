@@ -90,6 +90,7 @@ SWIG_LINK_LIBRARIES(swig_paddle
     ${RDMA_LD_FLAGS}
     ${START_END}
 )
+set_target_properties(${SWIG_MODULE_swig_paddle_REAL_NAME} PROPERTIES LINKER_LANGUAGE HIP)
 
 add_custom_command(OUTPUT ${PADDLE_SOURCE_DIR}/paddle/py_paddle/_swig_paddle.so
     COMMAND cp ${CMAKE_CURRENT_BINARY_DIR}/swig_paddle.py ${PADDLE_SOURCE_DIR}/paddle/py_paddle

@@ -141,7 +141,8 @@ endfunction()
 # TARGET_NAME: the unittest target name, same as executable file name
 # Rest Arguments: the source files to compile this unittest.
 macro(add_unittest_without_exec TARGET_NAME)
-    add_executable(${TARGET_NAME} ${ARGN})
+    #add_executable(${TARGET_NAME} ${ARGN})
+    HIP_ADD_EXECUTABLE(${TARGET_NAME} ${ARGN})
     link_paddle_test(${TARGET_NAME})
 endmacro()
 

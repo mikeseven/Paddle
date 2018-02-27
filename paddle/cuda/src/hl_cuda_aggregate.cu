@@ -245,7 +245,7 @@ __global__ void KeVectorAbsSum(real *E, real *Sum, int dimM) {
 
   sum_s[tid] = 0.0f;
   while (index < dimM) {
-    sum_s[tid] += abs(E[index]);
+    sum_s[tid] += fabsf(E[index]);
     index += blockDim.x * gridDim.y;
   }
   __syncthreads();

@@ -19,12 +19,13 @@ set(PADDLE_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR})
 SET(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O3 -g -DNDEBUG")
 SET(CMAKE_C_FLAGS_RELWITHDEBINFO "-O3 -g -DNDEBUG")
 
-include(FindHIP)
 include(system)
 
 project(paddle CXX C Go)
 message(STATUS "CXX compiler: " ${CMAKE_CXX_COMPILER} ", version: " ${CMAKE_CXX_COMPILER_VERSION})
 message(STATUS "C compiler: " ${CMAKE_C_COMPILER} ", version: " ${CMAKE_C_COMPILER_VERSION})
+
+find_package(HIP)
 
 find_package(Sphinx)
 if(NOT CMAKE_CROSSCOMPILING)
@@ -39,7 +40,8 @@ endif()
 include(simd)
 
 ################################ Configurations #######################################
-option(WITH_GPU         "Compile PaddlePaddle with NVIDIA GPU"          ${CUDA_FOUND})
+option(WITH_GPU         "Compile PaddlePaddle with NVIDIA GPU"          ON)
+option(WITH_AMD_GPU     "Compile PaddlePaddle with AMD GPU"             ON)
 option(WITH_AVX         "Compile PaddlePaddle with AVX intrinsics"      ${AVX_FOUND})
 option(WITH_MKL         "Compile PaddlePaddle with MKL support."        ${AVX_FOUND})
 option(WITH_DSO         "Compile PaddlePaddle with dynamic linked CUDA" ON)
@@ -171,7 +173,11 @@ set(EXTERNAL_LIBS
 )
 
 if(WITH_GPU)
-  include(cuda)
+  if(WITH_AMD_GPU)
+    include(hip)
+  else()
+    include(cuda)
+  endif(WITH_AMD_GPU)
 endif(WITH_GPU)
 
 if(WITH_MKLML)
