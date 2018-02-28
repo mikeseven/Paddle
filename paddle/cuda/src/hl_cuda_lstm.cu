@@ -56,11 +56,11 @@ public:
 };
 
 __device__ __forceinline__ void ptx_sync(const int id, const int barriers) {
-  asm volatile("bar.sync %0, %1;" : : "r"(id), "r"(barriers) : "memory");
+  __syncthreads();
 }
 
 __device__ __forceinline__ void ptx_arrive(const int id, const int barriers) {
-  asm volatile("bar.arrive %0, %1;" : : "r"(id), "r"(barriers) : "memory");
+  __syncthreads();
 }
 
 template <int valueSize, int frameSize>
