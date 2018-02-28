@@ -54,4 +54,28 @@ real linear(const real a, const real b);
 #include "hl_gpu_functions.cuh"
 #endif
 
+#include <type_traits>
+// To expand function pointer array since HCC doesn't support it.
+template<class F>
+void visit_activation(hl_activation_mode_t a, F f)
+{
+  switch(a)
+  {
+    case HL_ACTIVATION_SIGMOID:
+      f(std::integral_constant<hl_activation_mode_t, HL_ACTIVATION_SIGMOID>{});
+      break;
+    case HL_ACTIVATION_RELU:
+      f(std::integral_constant<hl_activation_mode_t, HL_ACTIVATION_RELU>{});
+      break;
+    case HL_ACTIVATION_TANH:
+      f(std::integral_constant<hl_activation_mode_t, HL_ACTIVATION_TANH>{});
+      break;
+    case HL_ACTIVATION_LINEAR:
+      f(std::integral_constant<hl_activation_mode_t, HL_ACTIVATION_LINEAR>{});
+      break;
+    default:
+      break;
+  };
+}
+
 #endif  // HL_FUNCTIONS_H_

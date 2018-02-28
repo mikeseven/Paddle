@@ -26,14 +26,11 @@ limitations under the License. */
  * threads(framePerBlock, batchPerBlock)
  * grid(frameBlocks, batchBlocks)
  */
-template<class Op, bool isBatch>
+template<class Op, bool isBatch, hl_activation_mode_t active_node, hl_activation_mode_t active_gate, hl_activation_mode_t active_state>
 __global__ void KeLstmForward(Op op,
                               hl_lstm_value value,
                               int frameSize,
-                              int batchSize,
-                              hl_activation_mode_t active_node,
-                              hl_activation_mode_t active_gate,
-                              hl_activation_mode_t active_state) {
+                              int batchSize) {
   const int frameIdx = blockIdx.x * blockDim.x + threadIdx.x;
   if (frameIdx >= frameSize) return;
 
@@ -98,15 +95,12 @@ __global__ void KeLstmForward(Op op,
  * threads(framePerBlock, batchPerBlock)
  * grid(frameBlocks, batchBlocks)
  */
-template<class Op, bool isBatch>
+template<class Op, bool isBatch, hl_activation_mode_t active_node, hl_activation_mode_t active_gate, hl_activation_mode_t active_state>
 __global__ void KeLstmBackward(Op op,
                                hl_lstm_value value,
                                hl_lstm_grad grad,
                                int frameSize,
-                               int batchSize,
-                               hl_activation_mode_t active_node,
-                               hl_activation_mode_t active_gate,
-                               hl_activation_mode_t active_state) {
+                               int batchSize) {
   const int frameIdx = blockIdx.x * blockDim.x + threadIdx.x;
   if (frameIdx >= frameSize) return;
 
@@ -227,13 +221,19 @@ void hl_gpu_lstm_forward(Op op,
     grid = dim3((frameSize + 32 - 1) / 32, (batchSize + 32 - 1) / 32);
   }
 
-  if (batchSize == 1) {
-    hipLaunchKernelGGL((KeLstmForward<Op, /* isBatch= */false>), dim3(grid), dim3(threads), 0, STREAM_DEFAULT, op, value,
-      frameSize, batchSize, active_node, active_gate, active_state);
-  } else {
-    hipLaunchKernelGGL((KeLstmForward<Op, /* isBatch= */true>), dim3(grid), dim3(threads), 0, STREAM_DEFAULT, op, value,
-      frameSize, batchSize, active_node, active_gate, active_state);
-  }
+  visit_activation(active_node, [&op, active_gate, active_state, &grid, &threads, value, frameSize, batchSize](auto active_node) {
+    visit_activation(active_gate, [&op, active_node, active_state, &grid, &threads, value, frameSize, batchSize](auto active_gate) {
+      visit_activation(active_state, [&op, active_node, active_gate, &grid, &threads, value, frameSize, batchSize](auto active_state) {
+        if (batchSize == 1) {
+          hipLaunchKernelGGL((KeLstmForward<Op, /* isBatch= */false, active_node, active_gate, active_state>),
+            dim3(grid), dim3(threads), 0, STREAM_DEFAULT, op, value, frameSize, batchSize);
+        } else {
+          hipLaunchKernelGGL((KeLstmForward<Op, /* isBatch= */true, active_node, active_gate, active_state>),
+            dim3(grid), dim3(threads), 0, STREAM_DEFAULT, op, value, frameSize, batchSize);
+        }
+      });
+    });
+  });
 
   CHECK_SYNC("hl_gpu_lstm_forward failed");
 }
@@ -260,13 +260,19 @@ void hl_gpu_lstm_backward(Op op,
     grid = dim3((frameSize + 32 - 1) / 32, (batchSize + 32 - 1) / 32);
   }
 
-  if (batchSize == 1) {
-    hipLaunchKernelGGL((KeLstmBackward<Op, /* isBatch= */false>), dim3(grid), dim3(threads), 0, STREAM_DEFAULT, op, value, grad,
-      frameSize, batchSize, active_node, active_gate, active_state);
-  } else {
-    hipLaunchKernelGGL((KeLstmBackward<Op, /* isBatch= */true>), dim3(grid), dim3(threads), 0, STREAM_DEFAULT, op, value, grad,
-      frameSize, batchSize, active_node, active_gate, active_state);
-  }
+  visit_activation(active_node, [&op, active_gate, active_state, &grid, &threads, value, grad, frameSize, batchSize](auto active_node) {
+    visit_activation(active_gate, [&op, active_node, active_state, &grid, &threads, value, grad, frameSize, batchSize](auto active_gate) {
+      visit_activation(active_state, [&op, active_node, active_gate, &grid, &threads, value, grad, frameSize, batchSize](auto active_state) {
+	if (batchSize == 1) {
+	  hipLaunchKernelGGL((KeLstmBackward<Op, /* isBatch= */false, active_node, active_gate, active_state>),
+            dim3(grid), dim3(threads), 0, STREAM_DEFAULT, op, value, grad, frameSize, batchSize);
+	} else {
+	  hipLaunchKernelGGL((KeLstmBackward<Op, /* isBatch= */true, active_node, active_gate, active_state>),
+            dim3(grid), dim3(threads), 0, STREAM_DEFAULT, op, value, grad, frameSize, batchSize);
+	}
+      });
+    });
+  });
 
   CHECK_SYNC("hl_gpu_lstm_backward failed");
 }
