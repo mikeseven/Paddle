@@ -40,6 +40,12 @@ __device__ __forceinline__ T sum_single_warp(T val) {
   return val;
 }
 
+//XXX: Commented out since __shfl_down doesn't support double.
+template <>
+__device__ __forceinline__ double sum_single_warp<double>(double val) {
+  return val;
+}
+
 // CUDA do not support dynamic arrary in template
 // https://stackoverflow.com/questions/20497209
 template <typename T>
@@ -124,8 +130,7 @@ class CrossEntropyFunctor<platform::GPUPlace, T> {
 };
 
 template class CrossEntropyFunctor<platform::GPUPlace, float>;
-// Fixme: Commented out since __shfl_down doesn't support double.
-//template class CrossEntropyFunctor<platform::GPUPlace, double>;
+template class CrossEntropyFunctor<platform::GPUPlace, double>;
 }  // namespace math
 }  // namespace operators
 }  // namespace paddle
