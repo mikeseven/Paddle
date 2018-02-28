@@ -22,7 +22,6 @@
 #include <algorithm>
 #include <type_traits>
 #ifdef __HIPCC__
-#include <thrust/execution_policy.h>
 #include <thrust/transform.h>
 #include "paddle/platform/details/device_ptr_cast.h"
 #endif
@@ -70,7 +69,7 @@ struct Transform<platform::GPUPlace> {
     auto place = context.GetPlace();
     PADDLE_ENFORCE(is_gpu_place(place), "It must use GPU place.");
     auto& ctx = reinterpret_cast<const CUDADeviceContext&>(context);
-    thrust::transform(thrust::cuda::par.on(ctx.stream()),
+    thrust::transform(
                       details::DevPtrCast(first), details::DevPtrCast(last),
                       details::DevPtrCast(result), op);
   }
@@ -83,7 +82,7 @@ struct Transform<platform::GPUPlace> {
     auto place = context.GetPlace();
     PADDLE_ENFORCE(is_gpu_place(place), "It must use GPU place.");
     auto& ctx = reinterpret_cast<const CUDADeviceContext&>(context);
-    thrust::transform(thrust::cuda::par.on(ctx.stream()),
+    thrust::transform(
                       details::DevPtrCast(first1), details::DevPtrCast(last1),
                       details::DevPtrCast(first2), details::DevPtrCast(result),
                       op);

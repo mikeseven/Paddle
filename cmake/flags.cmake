@@ -103,6 +103,7 @@ set(COMMON_FLAGS
     -Wall
     -Wextra
     -Werror
+    -Wno-maybe-uninitialized
     -Wnon-virtual-dtor
     -Wdelete-non-virtual-dtor
     -Wno-unused-parameter

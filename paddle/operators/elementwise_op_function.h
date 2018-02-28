@@ -132,6 +132,7 @@ class MidWiseTransformIterator<T, platform::CPUPlace> {
 };
 
 #ifdef __HCC__
+#if 0
 template <typename T>
 class RowwiseTransformIterator<T, platform::GPUPlace>
     : public thrust::iterator_adaptor<
@@ -173,6 +174,7 @@ class MidWiseTransformIterator<T, platform::GPUPlace>
   }
 };
 #endif
+#endif
 
 template <typename Functor, typename T, typename Place>
 class TransformFunctor {
@@ -193,15 +195,19 @@ class TransformFunctor {
   }
 
   inline void RunRowWise(int n, int pre) const {
+/*
     platform::Transform<Place> trans;
     trans(ctx_, x_, x_ + nx_, RowwiseTransformIterator<T, Place>(y_, n), z_,
           func_);
+*/
   }
 
   inline void RunMidWise(int n, int pre, int post) const {
+/*
     platform::Transform<Place> trans;
     trans(ctx_, x_, x_ + nx_, MidWiseTransformIterator<T, Place>(y_, n, post),
           z_, func_);
+*/
   }
 
  private:
