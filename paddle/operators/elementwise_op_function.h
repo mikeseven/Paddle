@@ -18,7 +18,7 @@
 #include "paddle/framework/operator.h"
 #include "paddle/platform/transform.h"
 
-#ifdef __NVCC__
+#ifdef __HCC__
 #include <thrust/iterator/iterator_adaptor.h>
 #endif
 
@@ -131,7 +131,7 @@ class MidWiseTransformIterator<T, platform::CPUPlace> {
   int post_;
 };
 
-#ifdef __NVCC__
+#ifdef __HCC__
 template <typename T>
 class RowwiseTransformIterator<T, platform::GPUPlace>
     : public thrust::iterator_adaptor<

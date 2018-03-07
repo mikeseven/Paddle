@@ -22,6 +22,7 @@
 #include <algorithm>
 #include <type_traits>
 #ifdef __HIPCC__
+#include <thrust/system/cuda/detail/par.h>
 #include <thrust/execution_policy.h>
 #include <thrust/transform.h>
 #include "paddle/platform/details/device_ptr_cast.h"
