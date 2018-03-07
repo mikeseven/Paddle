@@ -97,12 +97,14 @@ SET(CMAKE_EXTRA_INCLUDE_FILES "")
 
 # Common flags. the compiler flag used for C/C++ sources whenever release or debug
 # Do not care if this flag is support for gcc.
+# Add -Wno-maybe-uninitialized to fix Eigen
 set(COMMON_FLAGS
     -fPIC
     -fno-omit-frame-pointer
     -Wall
     -Wextra
     -Werror
+    -Wno-maybe-uninitialized
     -Wnon-virtual-dtor
     -Wdelete-non-virtual-dtor
     -Wno-unused-parameter
