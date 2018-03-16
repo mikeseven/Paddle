@@ -1,3 +1,8 @@
+#if(WITH_AMD_GPU)
+#  add_subdirectory(fluid)
+#  return()
+#endif()
+
 add_subdirectory(cuda)
 add_subdirectory(function)
 add_subdirectory(utils)
