@@ -29,14 +29,14 @@ RUN apt-get update && \
     wget unzip unrar tar xz-utils bzip2 gzip coreutils ntp \
     curl sed grep graphviz libjpeg-dev zlib1g-dev  \
     python-matplotlib gcc-5 g++-5 \
-    automake locales clang-format swig doxygen cmake  \
+    automake locales swig doxygen cmake  \
     liblapack-dev liblapacke-dev \
-    clang-5.0 llvm-5.0 libclang-5.0-dev \
+    clang-format-5.0 clang-5.0 llvm-5.0 libclang-5.0-dev \
     net-tools libtool && \
     apt-get clean -y
 
 # Install Go and glide
-RUN wget -qO- https://storage.googleapis.com/golang/go1.8.1.linux-amd64.tar.gz | \
+RUN wget -qO- https://storage.googleapis.com/golang/go1.10.linux-amd64.tar.gz | \
     tar -xz -C /usr/local && \
     mkdir /root/gopath && \
     mkdir /root/gopath/bin && \
