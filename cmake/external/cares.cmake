@@ -28,7 +28,7 @@ SET(CARES_INCLUDE_DIR "${CARES_INSTALL_DIR}/include/" CACHE PATH "cares include 
 ExternalProject_Add(
     extern_cares
     GIT_REPOSITORY "https://github.com/c-ares/c-ares.git"
-    GIT_TAG "cares-1_13_0"
+    GIT_TAG "cares-1_14_0"
     PREFIX          ${CARES_SOURCES_DIR}
     UPDATE_COMMAND  ""
     CONFIGURE_COMMAND ./buildconf && ./configure --disable-shared --prefix=${CARES_INSTALL_DIR}

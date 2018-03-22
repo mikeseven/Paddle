@@ -10,11 +10,13 @@ RUN /bin/bash -c 'if [[ -n ${UBUNTU_MIRROR} ]]; then sed -i 's#http://archive.ub
 ARG WITH_GPU
 ARG WITH_AVX
 ARG WITH_DOC
+ARG WITH_TESTING
 
 ENV WOBOQ OFF
 ENV WITH_GPU=${WITH_GPU:-ON}
 ENV WITH_AVX=${WITH_AVX:-ON}
 ENV WITH_DOC=${WITH_DOC:-OFF}
+ENV WITH_TESTING=${WITH_TESTING:-OFF}
 
 ENV HOME /root
 # Add bash enhancements
@@ -26,10 +28,10 @@ RUN apt-get update && \
     libnccl2=2.1.2-1+cuda8.0 libnccl-dev=2.1.2-1+cuda8.0 \
     wget unzip unrar tar xz-utils bzip2 gzip coreutils ntp \
     curl sed grep graphviz libjpeg-dev zlib1g-dev  \
-    python-matplotlib gcc-4.8 g++-4.8 \
+    python-matplotlib gcc-5 g++-5 \
     automake locales clang-format swig doxygen cmake  \
     liblapack-dev liblapacke-dev \
-    clang-3.8 llvm-3.8 libclang-3.8-dev \
+    clang-5.0 llvm-5.0 libclang-5.0-dev \
     net-tools libtool && \
     apt-get clean -y
 
@@ -77,10 +79,10 @@ RUN pip install certifi urllib3[secure]
 
 # Install woboq_codebrowser to /woboq
 RUN git clone https://github.com/woboq/woboq_codebrowser /woboq && \
-    (cd /woboq \
-     cmake -DLLVM_CONFIG_EXECUTABLE=/usr/bin/llvm-config-3.8 \
-           -DCMAKE_BUILD_TYPE=Release . \
-     make)
+    cd /woboq && \
+    cmake -DLLVM_CONFIG_EXECUTABLE=/usr/bin/llvm-config-5.0 \
+          -DCMAKE_BUILD_TYPE=Release . && \
+     make -j12
 
 # Configure OpenSSH server. c.f. https://docs.docker.com/engine/examples/running_ssh_service
 RUN mkdir /var/run/sshd
